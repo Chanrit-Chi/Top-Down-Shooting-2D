@@ -1,0 +1,5 @@
+﻿<Solution>
+  <Project Path="UniRx.csproj" />
+  <Project Path="Assembly-CSharp.csproj" />
+  <Project Path="Assembly-CSharp-firstpass.csproj" />
+</Solution>
