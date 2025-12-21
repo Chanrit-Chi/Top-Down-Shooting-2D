@@ -12,6 +12,12 @@ namespace Enemy
             currentHealth = maxHealth;
         }
 
+        public void SetHealthMultiplier(float multiplier)
+        {
+            maxHealth *= multiplier;
+            currentHealth = maxHealth;
+        }
+
         public void TakeDamage(float damage)
         {
             currentHealth -= damage;
@@ -36,6 +42,14 @@ namespace Enemy
         private void Die()
         {
             Debug.Log("Enemy defeated!");
+            
+            // Notify wave manager
+            EnemyDeathNotifier deathNotifier = GetComponent<EnemyDeathNotifier>();
+            if (deathNotifier != null)
+            {
+                deathNotifier.NotifyDeath();
+            }
+            
             Destroy(gameObject);
         }
     }

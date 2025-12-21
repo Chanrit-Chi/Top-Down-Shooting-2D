@@ -8,6 +8,8 @@ namespace Enemy
         private float moveSpeed;
         [SerializeField]
         private float rotationSpeed;
+        [SerializeField]
+        private float rotationOffset = -90f; // Adjust this if enemy faces wrong direction
 
         private Rigidbody2D rb;
         private Vector2 movementDirection;
@@ -42,7 +44,7 @@ namespace Enemy
 
         private void rotateTowardTarget()
         {
-            float targetAngle = Mathf.Atan2(movementDirection.y, movementDirection.x) * Mathf.Rad2Deg - 90f;
+            float targetAngle = Mathf.Atan2(movementDirection.y, movementDirection.x) * Mathf.Rad2Deg + rotationOffset;
             float currentAngle = rb.rotation;
             float newAngle = Mathf.LerpAngle(currentAngle, targetAngle, rotationSpeed * Time.fixedDeltaTime);
             
@@ -76,6 +78,11 @@ namespace Enemy
                     rb.linearVelocity = Vector2.zero;
                 }
             }
+        }
+
+        public Vector2 GetCurrentVelocity()
+        {
+            return rb.linearVelocity;
         }
     }
 }

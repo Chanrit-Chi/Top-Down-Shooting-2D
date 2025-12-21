@@ -16,6 +16,11 @@ namespace Enemy
             enemyAwareController = GetComponent<EnemyAwareController>();
         }
 
+        public void SetDamageMultiplier(float multiplier)
+        {
+            damageAmount *= multiplier;
+        }
+
         private void Update()
         {
             attackTimer -= Time.deltaTime;
