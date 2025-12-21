@@ -7,6 +7,7 @@ namespace TopDown.Shooting
         [Header("Movement State")]
         [SerializeField] private float speed = 20f;
         [SerializeField] private float lifeTime = 2f;
+        [SerializeField] private float damageAmount = 20f;
         private Rigidbody2D rb;
         private float lifeTimer;
         private void Awake()
@@ -31,6 +32,19 @@ namespace TopDown.Shooting
             if (lifeTimer >= lifeTime)
             {
                 gameObject.SetActive(false);
+            }
+        }
+
+        private void OnTriggerEnter2D(Collider2D collision)
+        {
+            if (collision.CompareTag("Enemy"))
+            {
+                IHealthSystem healthSystem = collision.GetComponent<IHealthSystem>();
+                if (healthSystem != null)
+                {
+                    healthSystem.TakeDamage(damageAmount);
+                    gameObject.SetActive(false);
+                }
             }
         }
 
