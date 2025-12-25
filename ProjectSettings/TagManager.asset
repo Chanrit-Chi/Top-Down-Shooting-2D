@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 3
   tags:
   - Enemy
+  - Ground
   layers:
   - Default
   - TransparentFX
@@ -56,6 +57,9 @@ TagManager:
     locked: 0
   - name: Enemy
     uniqueID: 1007492627
+    locked: 0
+  - name: Item
+    uniqueID: 4167443653
     locked: 0
   m_RenderingLayers:
   - Default

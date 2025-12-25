@@ -1,6 +1,7 @@
 using UnityEngine;
 using TMPro;
 using Enemy;
+using TopDown.Movement;
 
 public class HealthUI : MonoBehaviour
 {
@@ -18,10 +19,10 @@ public class HealthUI : MonoBehaviour
         playerHealth = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerHealth>();
         
         // Try to find AdvancedWaveManager first, then fall back to WaveManager
-        advancedWaveManager = FindObjectOfType<AdvancedWaveManager>();
+        advancedWaveManager = FindFirstObjectByType<AdvancedWaveManager>();
         if (advancedWaveManager == null)
         {
-            waveManager = FindObjectOfType<WaveManager>();
+            waveManager = FindFirstObjectByType<WaveManager>();
         }
         
         // Find all enemies

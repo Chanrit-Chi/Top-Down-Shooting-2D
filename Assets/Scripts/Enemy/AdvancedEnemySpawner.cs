@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine.Tilemaps;
 
 namespace Enemy
 {
@@ -7,12 +8,12 @@ namespace Enemy
     public class AdvancedEnemySpawner : MonoBehaviour
     {
         [SerializeField] private GameObject[] enemyPrefabs; // Multiple enemy types
-        [SerializeField] private float spawnDelay = 0.5f;
+        [SerializeField] private float spawnDelay = 1.5f;
         [SerializeField] private bool useRandomSpawning = true;
         [SerializeField] private Transform[] spawnPoints;
-        [SerializeField] private float randomSpawnRadius = 10f;
+        [SerializeField] private float randomSpawnRadius = 2f;
         [SerializeField] private Transform spawnCenter;
-        [SerializeField] private bool randomizeEnemyTypes = true;
+        [SerializeField] public Tilemap groundTilemap; // Tilemap for spawning
 
         private AdvancedWaveManager waveManager;
         private int spawnPointIndex = 0;
@@ -20,6 +21,32 @@ namespace Enemy
         private void Awake()
         {
             waveManager = GetComponent<AdvancedWaveManager>();
+            
+            // Auto-find tilemap if not assigned
+            if (groundTilemap == null)
+            {
+                Tilemap[] tilemaps = FindObjectsByType<Tilemap>(FindObjectsSortMode.None);
+                foreach (Tilemap tilemap in tilemaps)
+                {
+                    if (tilemap.gameObject.name == "Ground")
+                    {
+                        groundTilemap = tilemap;
+                        Debug.Log("AdvancedEnemySpawner: Found 'Ground' Tilemap");
+                        break;
+                    }
+                }
+                
+                if (groundTilemap == null && tilemaps.Length > 0)
+                {
+                    groundTilemap = tilemaps[0];
+                    Debug.LogWarning($"AdvancedEnemySpawner: 'Ground' tilemap not found, using first available: {groundTilemap.gameObject.name}");
+                }
+                
+                if (groundTilemap == null)
+                {
+                    Debug.LogError("AdvancedEnemySpawner: No Tilemap found in scene!");
+                }
+            }
             
             if (enemyPrefabs == null || enemyPrefabs.Length == 0)
             {
@@ -81,10 +108,15 @@ namespace Enemy
 
             Vector3 spawnPosition;
 
-            if (useRandomSpawning)
+            if (useRandomSpawning && groundTilemap != null)
+            {
+                spawnPosition = GetTilemapSpawnPosition();
+            }
+            else if (useRandomSpawning)
             {
                 Vector2 randomOffset = Random.insideUnitCircle * randomSpawnRadius;
                 spawnPosition = spawnCenter.position + new Vector3(randomOffset.x, randomOffset.y, 0);
+                Debug.LogWarning($"AdvancedEnemySpawner: Using circle spawn (no tilemap) at {spawnPosition}");
             }
             else
             {
@@ -119,7 +151,39 @@ namespace Enemy
                 deathNotifier.SetWaveManager(waveManager);
             }
 
-            Debug.Log($"Spawned {enemyPrefab.name} (HP: x{healthMultiplier:F2}, DMG: x{damageMultiplier:F2})");
+            Debug.Log($"Spawned {enemyPrefab.name} at {spawnPosition} (HP: x{healthMultiplier:F2}, DMG: x{damageMultiplier:F2})");
+        }
+
+        private Vector3 GetTilemapSpawnPosition()
+        {
+            if (groundTilemap == null)
+            {
+                Debug.LogError("AdvancedEnemySpawner: groundTilemap is NULL!");
+                return spawnCenter.position;
+            }
+            
+            BoundsInt bounds = groundTilemap.cellBounds;
+            
+            // Collect all valid tile positions
+            List<Vector3Int> validTiles = new List<Vector3Int>();
+            foreach (var pos in bounds.allPositionsWithin)
+            {
+                if (groundTilemap.HasTile(pos))
+                {
+                    validTiles.Add(pos);
+                }
+            }
+            
+            if (validTiles.Count == 0)
+            {
+                Debug.LogError($"AdvancedEnemySpawner: No valid tiles found in tilemap '{groundTilemap.name}'!");
+                return spawnCenter.position;
+            }
+            
+            // Pick a random valid tile
+            Vector3Int randomTile = validTiles[Random.Range(0, validTiles.Count)];
+            Vector3 spawnPos = groundTilemap.GetCellCenterWorld(randomTile);
+            return spawnPos;
         }
     }
 }

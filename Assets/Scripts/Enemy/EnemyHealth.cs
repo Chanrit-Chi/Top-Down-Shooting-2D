@@ -1,3 +1,5 @@
+using TopDown.Audio;
+using TopDown.ItemPickup;
 using UnityEngine;
 
 namespace Enemy
@@ -5,6 +7,11 @@ namespace Enemy
     public class EnemyHealth : MonoBehaviour, IHealthSystem
     {
         [SerializeField] private float maxHealth = 30f;
+
+        [Header("Sound Effects")]
+        [SerializeField] private AudioClip damageSound;
+        [SerializeField] private AudioClip deathSound;
+
         private float currentHealth;
 
         private void Awake()
@@ -21,6 +28,7 @@ namespace Enemy
         public void TakeDamage(float damage)
         {
             currentHealth -= damage;
+            SoundManager.Instance.PlaySound(damageSound);
             Debug.Log($"Enemy health: {currentHealth}/{maxHealth}");
 
             if (currentHealth <= 0)
@@ -42,6 +50,7 @@ namespace Enemy
         private void Die()
         {
             Debug.Log("Enemy defeated!");
+            SoundManager.Instance.PlaySound(deathSound);
             
             // Notify wave manager
             EnemyDeathNotifier deathNotifier = GetComponent<EnemyDeathNotifier>();
@@ -49,6 +58,8 @@ namespace Enemy
             {
                 deathNotifier.NotifyDeath();
             }
+
+            GetComponent<EnemyDropItem>()?.DropItem();
             
             Destroy(gameObject);
         }

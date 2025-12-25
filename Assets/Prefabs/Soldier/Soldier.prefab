@@ -18,6 +18,7 @@ GameObject:
   - component: {fileID: 1887178492865544681}
   - component: {fileID: 2182817709581280566}
   - component: {fileID: 6052530462957283004}
+  - component: {fileID: 6326134685733661708}
   - component: {fileID: 2712932569522240475}
   m_Layer: 0
   m_Name: Soldier
@@ -124,6 +125,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemy.EnemyHealth
   maxHealth: 30
+  damageSound: {fileID: 8300000, guid: 193080ed4afc8894a98dfc9ec41789a7, type: 3}
+  deathSound: {fileID: 8300000, guid: 0adc4a943b28dbf4d8d9e4771860aec7, type: 3}
 --- !u!114 &5961772762803448847
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -207,6 +210,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemy.EnemyAnimationController
   attackDuration: 0.5
+--- !u!114 &6326134685733661708
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2731456334393389716}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 473e54d0feba3ad438d9a37b56e44067, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TopDown.ItemPickup.EnemyDropItem
+  healthPickupPrefab: {fileID: 3403945087619690145, guid: 1fedc3fe16a8aae4582f60fcfc9a7d3f, type: 3}
+  bulletPickupPrefab: {fileID: 3666254313382777024, guid: a0692534863e7fb44bbe540290c3e40d, type: 3}
+  healthDropChance: 20
+  bulletDropChance: 30
 --- !u!212 &2712932569522240475
 SpriteRenderer:
   m_ObjectHideFlags: 0

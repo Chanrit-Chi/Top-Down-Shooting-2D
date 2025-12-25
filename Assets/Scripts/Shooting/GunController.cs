@@ -104,6 +104,13 @@ namespace TopDown.Shooting
 
         }
 
+        public void AddBullets(int amount)
+        {
+            
+            totalAmmo.Value += amount;
+            Debug.Log("Added " + amount + " bullets. Total ammo: " + totalAmmo.Value);
+        }
+
         private void Reload()
         {
             // Don't reload if already reloading or clip is full

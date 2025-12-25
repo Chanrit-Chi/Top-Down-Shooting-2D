@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 161446349476051749}
   - component: {fileID: 1781982155262686344}
   - component: {fileID: 423744519231055455}
+  - component: {fileID: -5744860069556467953}
   - component: {fileID: 6828443691184299317}
   m_Layer: 0
   m_Name: Enemy
@@ -80,6 +81,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyAI.EnemyPatrolBehaviour
   moveSpeed: 0.5
   rotationSpeed: 100
+  rotationOffset: -90
 --- !u!114 &8629788983508928229
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -121,6 +123,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemy.EnemyHealth
   maxHealth: 30
+  damageSound: {fileID: 8300000, guid: c4999b27fc99b6c40956debfa1fc3e92, type: 3}
+  deathSound: {fileID: 8300000, guid: b765ee076fe7bdd44bfb2a6a44a98ad3, type: 3}
 --- !u!114 &423744519231055455
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -133,6 +137,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d86cbcedf8c862468a55089f0200af7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemy.EnemyDeathNotifier
+--- !u!114 &-5744860069556467953
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 320856325009386121}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 473e54d0feba3ad438d9a37b56e44067, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TopDown.ItemPickup.EnemyDropItem
+  healthPickupPrefab: {fileID: 3403945087619690145, guid: 1fedc3fe16a8aae4582f60fcfc9a7d3f, type: 3}
+  bulletPickupPrefab: {fileID: 3666254313382777024, guid: a0692534863e7fb44bbe540290c3e40d, type: 3}
+  healthDropChance: 20
+  bulletDropChance: 30
 --- !u!58 &6828443691184299317
 CircleCollider2D:
   m_ObjectHideFlags: 0
