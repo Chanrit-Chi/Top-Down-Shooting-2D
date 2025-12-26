@@ -3,62 +3,60 @@ using TMPro;
 using Enemy;
 using TopDown.Movement;
 
-public class HealthUI : MonoBehaviour
+namespace TopDown.UI
 {
-    [SerializeField] private TextMeshProUGUI playerHealthText;
-    [SerializeField] private TextMeshProUGUI enemyHealthText;
-    [SerializeField] private TextMeshProUGUI waveText;
-    
-    private PlayerHealth playerHealth;
-    private EnemyHealth[] enemyHealths;
-    private AdvancedWaveManager advancedWaveManager;
-    private WaveManager waveManager;
-
-    private void Start()
+    public class HealthUI : MonoBehaviour
     {
-        playerHealth = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerHealth>();
+        [SerializeField] private TextMeshProUGUI playerHealthText;
+        [SerializeField] private TextMeshProUGUI enemyHealthText;
+        [SerializeField] private TextMeshProUGUI waveText;
         
-        // Try to find AdvancedWaveManager first, then fall back to WaveManager
-        advancedWaveManager = FindFirstObjectByType<AdvancedWaveManager>();
-        if (advancedWaveManager == null)
-        {
-            waveManager = FindFirstObjectByType<WaveManager>();
-        }
-        
-        // Find all enemies
-        enemyHealths = FindObjectsByType<EnemyHealth>(FindObjectsSortMode.None);
-    }
+        private PlayerHealth playerHealth;
+        private EnemyHealth[] enemyHealths;
+        private AdvancedWaveManager advancedWaveManager;
 
-    private void Update()
-    {
-        if (playerHealth != null && playerHealthText != null)
+        private void Start()
         {
-            playerHealthText.text = $"{playerHealth.GetCurrentHealth():F0}/{playerHealth.GetMaxHealth():F0}";
+            playerHealth = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerHealth>();
+            
+            // Try to find AdvancedWaveManager first, then fall back to WaveManager
+            advancedWaveManager = FindFirstObjectByType<AdvancedWaveManager>();
+            
+            // Find all enemies
+            enemyHealths = FindObjectsByType<EnemyHealth>(FindObjectsSortMode.None);
         }
 
-        // Refresh enemy list every frame to account for newly spawned enemies
-        enemyHealths = FindObjectsByType<EnemyHealth>(FindObjectsSortMode.None);
-        
-        if (enemyHealthText != null && enemyHealths.Length > 0)
+        private void Update()
         {
-            float totalEnemyHealth = 0;
-            foreach (var enemy in enemyHealths)
+            if (playerHealth != null && playerHealthText != null)
             {
-                if (enemy != null)
-                    totalEnemyHealth += enemy.GetCurrentHealth();
+                playerHealthText.text = $"{playerHealth.GetCurrentHealth():F0}/{playerHealth.GetMaxHealth():F0}";
             }
-            enemyHealthText.text = $"{enemyHealths.Length}";
-        }
 
-        if (waveText != null)
-        {
-            if (advancedWaveManager != null)
+            // Refresh enemy list every frame to account for newly spawned enemies
+            enemyHealths = FindObjectsByType<EnemyHealth>(FindObjectsSortMode.None);
+            
+            if (enemyHealthText != null && enemyHealths.Length > 0)
             {
-                waveText.text = $"Wave: {advancedWaveManager.GetCurrentWave()}";
+                float totalEnemyHealth = 0;
+                foreach (var enemy in enemyHealths)
+                {
+                    if (enemy != null)
+                        totalEnemyHealth += enemy.GetCurrentHealth();
+                }
+                enemyHealthText.text = $"{enemyHealths.Length}";
             }
-            else if (waveManager != null)
+
+            if (waveText != null)
             {
-                waveText.text = $"Wave: {waveManager.GetCurrentWave()}";
+                if (advancedWaveManager != null)
+                {
+                    waveText.text = $"Wave: {advancedWaveManager.GetCurrentWave()}";
+                }
+                else
+                {
+                    waveText.text = "Wave: N/A";
+                }
             }
         }
     }

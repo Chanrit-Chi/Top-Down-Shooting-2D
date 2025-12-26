@@ -2,6 +2,7 @@ using UnityEngine;
 
 namespace TopDown.Audio
 {
+    [RequireComponent(typeof(AudioSource))]
     public class SoundManager : MonoBehaviour
     {
         public static SoundManager Instance { get; private set; }
@@ -16,14 +17,22 @@ namespace TopDown.Audio
             else
             {
                 Destroy(gameObject);
+                return;
             }
 
             audioSource = GetComponent<AudioSource>();
+            if (audioSource == null)
+            {
+                audioSource = gameObject.AddComponent<AudioSource>();
+            }
         }
 
         public void PlaySound(AudioClip clip)
         {
-            audioSource.PlayOneShot(clip);
+            if (audioSource != null && clip != null)
+            {
+                audioSource.PlayOneShot(clip);
+            }
         }
     }
 }

@@ -21,6 +21,12 @@ namespace TopDown.CameraController
         // Update is called once per frame
         private void Update()
         {
+            // Don't move camera when game is paused
+            if (Time.timeScale == 0f)
+            {
+                return;
+            }
+
             Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
             Vector3 cameraDisplacement = (mousePosition - playerTransform.position) * displacementMultiplier;
             Vector3 finalCameraPosition = new Vector3(playerTransform.position.x + cameraDisplacement.x, playerTransform.position.y + cameraDisplacement.y, zPosition);
